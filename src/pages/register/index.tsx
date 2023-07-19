@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, MenuItem, TextField } from '@mui/material';
+import { Button, TextField, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import useFirebase from '@/hook/useFirebase'; // Import the hook from the correct location
 import { UserModel } from '@/models/UserModels';
 import SinglePageLayout from '@/layouts/SinglePage';
@@ -172,19 +172,14 @@ const Register: React.FC = () => {
           </ul>
         </div>
 
-        {/* Gender */}
-        <TextField
-          select
-          label="Gender"
-          {...register('meta.gender', { required: true })}
-          error={!!errors?.meta?.gender}
-          helperText={errors?.meta?.gender ? 'Gender is required' : ''}
-          InputLabelProps={{ className: 'required' }}
-          className="mb-4 w-full"
-        >
-          <MenuItem value="male">Male</MenuItem>
-          <MenuItem value="female">Female</MenuItem>
-        </TextField>
+        <FormControl component="fieldset" className="mb-4" {...register('meta.gender', { required: true })}>
+          <FormLabel component="legend" className="required">Gender</FormLabel>
+          <RadioGroup aria-label="gender" name="gender" className="flex flex-row">
+            <FormControlLabel value="male" control={<Radio />} label="Male" />
+            <FormControlLabel value="female" control={<Radio />} label="Female" />
+          </RadioGroup>
+          {errors?.meta?.gender && <span className="text-red-600">Gender is required</span>}
+        </FormControl>
 
         {/* Date of Birth */}
         <TextField
