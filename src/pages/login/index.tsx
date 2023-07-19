@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { Button, TextField } from "@mui/material"
+import SinglePageLayout from "@/layouts/SinglePage";
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ export default function Login() {
     console.log('Password:', password);
   }
   return (
-    <div>
+    <SinglePageLayout>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <TextField
@@ -33,10 +34,10 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <Button variant="contained" type="submit">
+        <Button variant="outlined" type="submit">
           Login
         </Button>
       </form>
-    </div>
+    </SinglePageLayout>
   )
 }
