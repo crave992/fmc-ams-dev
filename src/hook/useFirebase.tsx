@@ -15,21 +15,29 @@ const firebaseConfig = {
   appId: "1:841944516298:web:6ef90f43309c64981d1633",
   measurementId: "G-BX0XJMX24W"
 };
+
 export default function useFirebase() {
   const [firebaseInitialized, setFirebaseInitialized] = useState(false);
 
   useEffect(() => {
+    // Check if Firebase app is already initialized
     if (!firebase.apps.length) {
+      // Initialize Firebase with the config
       firebase.initializeApp(firebaseConfig);
-    } else {
-      firebase.app(); // Retrieve the default app if it already exists
     }
 
     setFirebaseInitialized(true);
 
-    return () => {
-      firebase.app().delete();
-    };
+    // No need to delete the app, leave it initialized for the lifetime of your app
+
+    // You can optionally add any additional Firebase configurations here, such as Firestore settings, etc.
+
+    // The hook will only run this effect once on mount, ensuring Firebase is initialized only once.
+
+    // Cleanup function (optional, if needed)
+    // return () => {
+    //   // Perform any cleanup actions here (if needed)
+    // };
   }, []);
 
   return firebaseInitialized ? firebase : null;

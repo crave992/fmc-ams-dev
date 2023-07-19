@@ -1,3 +1,4 @@
+
 import React, { ReactNode } from 'react';
 import Footer from './templates/main/Footer';
  type LayoutProps = {
@@ -5,9 +6,9 @@ import Footer from './templates/main/Footer';
 };
  const SinglePageLayout = ({ children }: LayoutProps) => {
   return (
-    <div>
+    <div className="singlePageLayout background-1">
       <main>
-        <div className="container">
+        <div className="card">
           {children}
         </div>
       </main>

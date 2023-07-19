@@ -1,16 +1,17 @@
 export interface Meta {
-  firstName: string;
-  lastName: string;
-  age: number;
+  firstName: string | null;
+  lastName: string | null;
+  age: number | null;
   gender: 'male' | 'female';
   dateOfBirth: Date;
-  address: string;
+  address: string | null;
+  phoneNumber: string | null;
 }
 
 export interface UserModel {
   id: string;
   displayName: string;
-  profileImageURL: string;
+  profileImageURL: string | null;
   username: string;
   email: string;
   password: string;
@@ -38,6 +39,7 @@ export const defaultUserModel: UserModel = {
     gender: 'male',
     dateOfBirth: new Date(),
     address: '',
+    phoneNumber: ''
   },
   dateCreated: new Date(),
   dateUpdated: new Date(),

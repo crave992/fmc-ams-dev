@@ -1,0 +1,16 @@
+.singlePageLayout {
+  padding: 20px 10px;
+  box-sizing: border-box;
+  display: block;
+  height: 100%;
+  overflow: auto;
+
+  .card{
+    max-width: 800px;
+    width: 100%;
+    margin: 80px auto 10px;
+    padding: 40px 30px;
+    background: #FFF;
+    border-radius: 10px;
+  }
+}
