@@ -75,7 +75,7 @@ export default function Login() {
       </Modal>
 
       <p className="mt-4">
-        Don't have an account? <Link href="/register">Sign Up</Link>
+        Don&apos;t have an account? <Link href="/register">Sign Up</Link>
       </p>
     </SinglePageLayout>
   );
