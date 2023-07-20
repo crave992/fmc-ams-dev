@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, TextField, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { Button, TextField, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, InputAdornment, IconButton } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import useFirebase from '@/hook/useFirebase'; // Import the hook from the correct location
 import { UserModel } from '@/models/UserModels';
 import SinglePageLayout from '@/layouts/SinglePage';
 import ImageUploader from '@/components/ImageUploader';
+import Link from 'next/link';
 
 const Register: React.FC = () => {
   const firebase = useFirebase();
@@ -25,6 +28,10 @@ const Register: React.FC = () => {
   const [hasLowercase, setHasLowercase] = useState(false);
   const [hasNumber, setHasNumber] = useState(false);
 
+  // State variable to control password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const checkMinLength = (value: string) => {
     return value.length >= 8;
   };
@@ -39,6 +46,17 @@ const Register: React.FC = () => {
 
   const checkNumber = (value: string) => {
     return /\d/.test(value);
+  };
+
+  // Function to toggle password visibility
+  const handlePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  // Function to toggle confirm password visibility
+  const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setConfirmPassword(value);
   };
 
   // Update password conditions on password change
@@ -63,6 +81,12 @@ const Register: React.FC = () => {
       // Set the displayName field
       const displayName = `${meta.firstName} ${meta.lastName}`;
       await firebase.auth().currentUser?.updateProfile({ displayName });
+
+      // Check if the password and confirm password fields match
+      if (data.password !== confirmPassword) {
+        console.error('Passwords do not match.');
+        return;
+      }
 
       // Save user data to Firestore
       if (userCredential?.user) {
@@ -144,7 +168,7 @@ const Register: React.FC = () => {
 
         {/* Password */}
         <TextField
-          type="password"
+          type={showPassword ? 'text' : 'password'} // Toggle between 'text' and 'password' type
           label="Password"
           {...register('password', {
             required: 'Password is required',
@@ -154,12 +178,44 @@ const Register: React.FC = () => {
                 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one numeric character',
             },
           })}
-          value={password} // Set the value prop to the password state variable
+          value={password}
           error={!!errors.password}
           helperText={errors.password?.message || ''}
           InputLabelProps={{ className: 'required' }}
           className="mb-4 w-full"
           onChange={handlePasswordChange}
+          // Add an InputAdornment for password visibility toggle
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handlePasswordVisibility} edge="end">
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+
+        {/* Confirm Password */}
+        <TextField
+          type={confirmPassword ? 'text' : 'password'} // Toggle between 'text' and 'password' type
+          label="Confirm Password"
+          value={confirmPassword}
+          error={confirmPassword !== password}
+          helperText={confirmPassword !== password ? 'Passwords do not match' : ''}
+          InputLabelProps={{ className: 'required' }}
+          className="mb-4 w-full"
+          onChange={handleConfirmPasswordChange}
+          // Add an InputAdornment for confirm password visibility toggle
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handlePasswordVisibility} edge="end">
+                  {confirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
 
         {/* Password checklist */}
@@ -227,9 +283,14 @@ const Register: React.FC = () => {
         </div>
 
         {/* Add more fields based on the UserModel interface */}
-        <Button type="submit" variant="outlined" color="primary">
-          Submit
-        </Button>
+        <div className="flex gap-8">
+          <Button type="submit" variant="outlined" color="primary" className="basis-1/2">
+            Submit
+          </Button>
+          <Button href="/login" variant="outlined" color="error" className="basis-1/2">
+            Cancel
+          </Button>
+        </div>
       </form>
     </SinglePageLayout>
   );
