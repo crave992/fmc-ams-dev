@@ -28,16 +28,6 @@ export default function useFirebase() {
 
     setFirebaseInitialized(true);
 
-    // No need to delete the app, leave it initialized for the lifetime of your app
-
-    // You can optionally add any additional Firebase configurations here, such as Firestore settings, etc.
-
-    // The hook will only run this effect once on mount, ensuring Firebase is initialized only once.
-
-    // Cleanup function (optional, if needed)
-    // return () => {
-    //   // Perform any cleanup actions here (if needed)
-    // };
   }, []);
 
   return firebaseInitialized ? firebase : null;

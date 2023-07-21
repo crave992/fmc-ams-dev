@@ -8,6 +8,7 @@ interface ImageUploaderProps {
   register: UseFormRegister<ExtendedUserModel>; // Use the ExtendedUserModel type here
   name: string;
   label: string;
+  defaultValue: string | null;
 }
 
 interface UserImageModel extends Partial<UserModel> {
@@ -16,9 +17,9 @@ interface UserImageModel extends Partial<UserModel> {
 
 type ExtendedUserModel = UserModel & UserImageModel; // Union of UserModel and UserImageModel with optional properties
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ register, name, label }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({ register, name, label, defaultValue }) => {
   const [uploading, setUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(defaultValue || null); // Use the defaultValue for initial imageUrl state
   const firebase = useFirebase();
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {

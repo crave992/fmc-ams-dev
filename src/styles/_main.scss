@@ -1,0 +1,30 @@
+html,
+body {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#__next{
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  box-sizing: border-box;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+.required::after {
+  content: ' *';
+  color: red;
+}
+
+.background-1 {
+  background-image: url(../../public/img/background.jpg);
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}

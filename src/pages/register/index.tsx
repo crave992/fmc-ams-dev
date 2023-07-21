@@ -4,10 +4,9 @@ import { Button, TextField, FormControl, FormControlLabel, FormLabel, Radio, Rad
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import useFirebase from '@/hook/useFirebase'; // Import the hook from the correct location
-import { UserModel } from '@/models/UserModels';
+import { UserModel, defaultUserModel } from '@/models/UserModels';
 import SinglePageLayout from '@/layouts/SinglePage';
 import ImageUploader from '@/components/ImageUploader';
-import Link from 'next/link';
 
 const Register: React.FC = () => {
   const firebase = useFirebase();
@@ -121,103 +120,109 @@ const Register: React.FC = () => {
       <h2 className="mb-4 font-extrabold text-center text-2xl">Register</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         {/* FirstName */}
-        <TextField
-          label="First Name"
-          {...register('meta.firstName', { required: true })}
-          error={!!errors?.meta?.firstName}
-          helperText={errors?.meta?.firstName ? 'First Name is required' : ''}
-          InputLabelProps={{ className: 'required' }}
-          className="mb-4 w-full"
-        />
-
+        <div className="mb-4">
+          <TextField
+            label="First Name"
+            {...register('meta.firstName', { required: true })}
+            error={!!errors?.meta?.firstName}
+            helperText={errors?.meta?.firstName ? 'First Name is required' : ''}
+            InputLabelProps={{ className: 'required' }}
+            className="mb-4 w-full"
+          />
+        </div>
         {/* LastName */}
-        <TextField
-          label="Last Name"
-          {...register('meta.lastName', { required: true })}
-          error={!!errors?.meta?.lastName}
-          helperText={errors?.meta?.lastName ? 'Last Name is required' : ''}
-          InputLabelProps={{ className: 'required' }}
-          className="mb-4 w-full"
-        />
-
+        <div className="mb-4">
+          <TextField
+            label="Last Name"
+            {...register('meta.lastName', { required: true })}
+            error={!!errors?.meta?.lastName}
+            helperText={errors?.meta?.lastName ? 'Last Name is required' : ''}
+            InputLabelProps={{ className: 'required' }}
+            className="w-full"
+          />
+        </div>
         {/* Username */}
-        <TextField
-          label="Username"
-          {...register('username')}
-          error={!!errors.username}
-          helperText={errors.username ? 'Username is required' : ''}
-          InputLabelProps={{ className: 'required' }}
-          className="mb-4 w-full"
-        />
-
+        <div className="mb-4">
+          <TextField
+            label="Username"
+            {...register('username')}
+            error={!!errors.username}
+            helperText={errors.username ? 'Username is required' : ''}
+            InputLabelProps={{ className: 'required' }}
+            className="mb-4 w-full"
+          />
+        </div>
         {/* Email */}
-        <TextField
-          label="Email"
-          {...register('email', {
-            required: 'Email is required',
-            pattern: {
-              value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/i,
-              message: 'Invalid email address',
-            },
-          })}
-          error={!!errors.email}
-          helperText={errors.email?.message || ''}
-          InputLabelProps={{ className: 'required' }}
-          className="mb-4 w-full"
-        />
-
+          <div className="mb-4">
+          <TextField
+            label="Email"
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/i,
+                message: 'Invalid email address',
+              },
+            })}
+            error={!!errors.email}
+            helperText={errors.email?.message || ''}
+            InputLabelProps={{ className: 'required' }}
+            className="w-full"
+          />
+        </div>
         {/* Password */}
-        <TextField
-          type={showPassword ? 'text' : 'password'} // Toggle between 'text' and 'password' type
-          label="Password"
-          {...register('password', {
-            required: 'Password is required',
-            pattern: {
-              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/,
-              message:
-                'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one numeric character',
-            },
-          })}
-          value={password}
-          error={!!errors.password}
-          helperText={errors.password?.message || ''}
-          InputLabelProps={{ className: 'required' }}
-          className="mb-4 w-full"
-          onChange={handlePasswordChange}
-          // Add an InputAdornment for password visibility toggle
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handlePasswordVisibility} edge="end">
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-
+        <div className="mb-4">
+          <TextField
+            type={showPassword ? 'text' : 'password'} // Toggle between 'text' and 'password' type
+            label="Password"
+            {...register('password', {
+              required: 'Password is required',
+              pattern: {
+                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                message:
+                  'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one numeric character',
+              },
+            })}
+            value={password}
+            error={!!errors.password}
+            helperText={errors.password?.message || ''}
+            InputLabelProps={{ className: 'required' }}
+            className="w-full"
+            onChange={handlePasswordChange}
+            // Add an InputAdornment for password visibility toggle
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handlePasswordVisibility} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />  
+        </div>
         {/* Confirm Password */}
-        <TextField
-          type={confirmPassword ? 'text' : 'password'} // Toggle between 'text' and 'password' type
-          label="Confirm Password"
-          value={confirmPassword}
-          error={confirmPassword !== password}
-          helperText={confirmPassword !== password ? 'Passwords do not match' : ''}
-          InputLabelProps={{ className: 'required' }}
-          className="mb-4 w-full"
-          onChange={handleConfirmPasswordChange}
-          // Add an InputAdornment for confirm password visibility toggle
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handlePasswordVisibility} edge="end">
-                  {confirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-
+        <div className="mb-4">
+          <TextField
+            type={confirmPassword ? 'text' : 'password'} // Toggle between 'text' and 'password' type
+            label="Confirm Password"
+            value={confirmPassword}
+            error={confirmPassword !== password}
+            helperText={confirmPassword !== password ? 'Passwords do not match' : ''}
+            InputLabelProps={{ className: 'required' }}
+            className="w-full"
+            onChange={handleConfirmPasswordChange}
+            // Add an InputAdornment for confirm password visibility toggle
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handlePasswordVisibility} edge="end">
+                    {confirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
         {/* Password checklist */}
         <div>
           <ul>
@@ -227,59 +232,69 @@ const Register: React.FC = () => {
             <li>{hasNumber ? '✓' : '✗'} Numeric character</li>
           </ul>
         </div>
-
-        <FormControl component="fieldset" className="mb-4" {...register('meta.gender', { required: true })}>
-          <FormLabel component="legend" className="required">Gender</FormLabel>
-          <RadioGroup aria-label="gender" name="gender" className="flex flex-row">
-            <FormControlLabel value="male" control={<Radio />} label="Male" />
-            <FormControlLabel value="female" control={<Radio />} label="Female" />
-          </RadioGroup>
-          {errors?.meta?.gender && <span className="text-red-600">Gender is required</span>}
-        </FormControl>
-
+        <div className="mb-4">
+          <FormControl component="fieldset" {...register('meta.gender', { required: true })}>
+            <FormLabel component="legend" className="required">Gender</FormLabel>
+            <RadioGroup aria-label="gender" name="gender">
+              <div className="flex flex-row">
+                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                <FormControlLabel value="female" control={<Radio />} label="Female" />
+              </div>
+            </RadioGroup>
+            {errors?.meta?.gender && <span className="text-red-600">Gender is required</span>}
+          </FormControl>
+        </div>
         {/* Date of Birth */}
-        <TextField
-          type="date"
-          label="Date of Birth"
-          {...register('meta.dateOfBirth', { required: true })}
-          error={!!errors?.meta?.dateOfBirth}
-          helperText={errors?.meta?.dateOfBirth ? 'Date of Birth is required' : ''}
-          InputLabelProps={{
-            shrink: true,
-            className: 'required',
-          }}
-          className="mb-4 w-full"
-          onChange={handleDateOfBirthChange}
-        />
-
+        <div className="mb-4">
+          <TextField
+            type="date"
+            label="Date of Birth"
+            {...register('meta.dateOfBirth', { required: true })}
+            error={!!errors?.meta?.dateOfBirth}
+            helperText={errors?.meta?.dateOfBirth ? 'Date of Birth is required' : ''}
+            InputLabelProps={{
+              shrink: true,
+              className: 'required',
+            }}
+            className="mb-4 w-full"
+            onChange={handleDateOfBirthChange}
+          />
+        </div>
         {/* Address */}
-        <TextField
-          label="Address"
-          {...register('meta.address', { required: true })}
-          error={!!errors?.meta?.address}
-          helperText={errors?.meta?.address ? 'Address is required' : ''}
-          InputLabelProps={{ className: 'required' }}
-          className="mb-4 w-full"
-        />
-
+        <div className="mb-4">
+          <TextField
+            label="Address"
+            {...register('meta.address', { required: true })}
+            error={!!errors?.meta?.address}
+            helperText={errors?.meta?.address ? 'Address is required' : ''}
+            InputLabelProps={{ className: 'required' }}
+            className="mb-4 w-full"
+          />
+        </div>
         {/* Phone Number */}
-        <TextField
-          label="Phone Number"
-          {...register('meta.phoneNumber', {
-            required: 'Phone Number is required',
-            pattern: {
-              value: /^\d{11,13}$/,
-              message: 'Phone Number must be 11 to 13 digits',
-            },
-          })}
-          error={!!errors.meta?.phoneNumber}
-          helperText={errors.meta?.phoneNumber?.message || ''}
-          InputLabelProps={{ className: 'required' }}
-          className="mb-4 w-full"
-        />
-
+        <div className="mb-4">
+          <TextField
+            label="Phone Number"
+            {...register('meta.phoneNumber', {
+              required: 'Phone Number is required',
+              pattern: {
+                value: /^\d{11,13}$/,
+                message: 'Phone Number must be 11 to 13 digits',
+              },
+            })}
+            error={!!errors.meta?.phoneNumber}
+            helperText={errors.meta?.phoneNumber?.message || ''}
+            InputLabelProps={{ className: 'required' }}
+            className="w-full"
+          />
+        </div>
         <div className="mb-4 w-full">
-          <ImageUploader register={register} name="profileImageURL" label="Profile Image" />
+        <ImageUploader
+            register={register}
+            name="profileImageURL"
+            label="Profile Image"
+            defaultValue={defaultUserModel.profileImageURL}
+          />
         </div>
 
         {/* Add more fields based on the UserModel interface */}
