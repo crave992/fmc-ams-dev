@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Logout from '@/components/Logout';
 import { getCurrentUserInfo } from '@/lib/userLib'; // Import the getCurrentUserInfo function
-import { Menu, MenuItem, ListItemIcon, ListItemText, IconButton } from '@mui/material';
+import { Menu, MenuItem, ListItemIcon, ListItemText, IconButton, Button } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import Link from 'next/link';
 
 export default function Header() {
   const userInfo = getCurrentUserInfo(); // Get the user information
@@ -25,9 +25,14 @@ export default function Header() {
         <div className="accountInfo gap-4 flex items-center">
           {userInfo ? (
             <>
-              <IconButton onClick={handleMenuOpen}>
-                <AccountCircleIcon />
-              </IconButton>
+              <Button onClick={handleMenuOpen}>          
+                {userInfo.profileImageURL && (
+                  <ListItemIcon>
+                    <Image src={userInfo.profileImageURL} width={30} height={30} alt="Profile Image" className="rounded-full" />
+                  </ListItemIcon>
+                )}
+                <ListItemText primary={userInfo.displayName} />
+              </Button>
               <Menu
                 anchorEl={menuAnchor}
                 open={Boolean(menuAnchor)}
@@ -35,21 +40,10 @@ export default function Header() {
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               >
-                <MenuItem onClick={handleMenuClose}>
-                  {userInfo.profileImageURL && (
-                    <ListItemIcon>
-                      <Image src={userInfo.profileImageURL} width={30} height={30} alt="Profile Image" className="rounded-full" />
-                    </ListItemIcon>
-                  )}
-                  <ListItemText primary={userInfo.displayName} />
-                </MenuItem>
-                <MenuItem onClick={handleMenuClose}>
-                  <Logout />
-                  <ListItemIcon>
-                    <PowerSettingsNewIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Logout" />
-                </MenuItem>
+                <Link href='/admin/account-settings' style={{ textDecoration: 'none' }}>
+                  <MenuItem>Account Settings</MenuItem>
+                </Link>
+                <Logout />
               </Menu>
             </>
           ) : (
