@@ -1,8 +1,10 @@
-interface TimeLog {
-  id: number;
-  employeeName: string;
+// models/TimeLog.ts
+export interface TimeLog {
   date: string;
-  hoursWorked: number;
-  description: string;
+  userId: string;
+  userName: string;
+  timeIn: string | null;
+  lunchIn: string | null;
+  lunchOut: string | null;
+  timeOut: string | null;
 }
-export default TimeLog;
