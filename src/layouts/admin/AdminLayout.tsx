@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import Header from './templates/Header';
-import Sidebar from './templates/Sidebar';
 import Footer from './templates/Footer';
  type LayoutProps = {
   children: ReactNode;
@@ -10,7 +9,6 @@ import Footer from './templates/Footer';
     
     <div className="adminLayout">
       <Header/>
-      <Sidebar/>
       <main>
         <div className="content">
           {children}

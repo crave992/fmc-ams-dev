@@ -9,14 +9,6 @@ body {
   height: 100%;
 }
 
-.container {
-  width: 100%;
-  max-width: 1200px;
-  box-sizing: border-box;
-  padding: 0 15px;
-  margin: 0 auto;
-}
-
 .required::after {
   content: ' *';
   color: red;
@@ -27,4 +19,20 @@ body {
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.background-title {
+  background-image: url(../../public/img/background.webp);
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  
+  h2 {
+    text-shadow: 0 0 10px #000;
+    font-weight: 900;
+    font-size: 40px;
+    color: #FFFFFF;
+    text-transform: uppercase;
+  }
 }

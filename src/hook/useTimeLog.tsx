@@ -39,6 +39,7 @@ export function useTimeLog() {
             lunchIn: null,
             lunchOut: null,
             timeOut: null,
+            totalTime: null
           };
           await employeeRecordRef.update({ timeLogs: [...timeLogs, newTimeLog] });
           setTimeLog(newTimeLog); // Set the new timeLog in state
@@ -53,6 +54,7 @@ export function useTimeLog() {
           lunchIn: null,
           lunchOut: null,
           timeOut: null,
+          totalTime: null
         };
         await employeeRecordRef.set({ timeLogs: [newTimeLog] });
         setTimeLog(newTimeLog); // Set the new timeLog in state

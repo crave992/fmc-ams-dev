@@ -20,7 +20,6 @@ const EmployeeRecord: React.FC<EmployeeRecordProps> = () => {
   useEffect(() => {
     // Update the current time every second for the digital clock
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-
     // Disable all buttons if Time In is recorded
     if (timeLog?.timeIn !== null) {
       setCanRecordTimeIn(false);
@@ -79,24 +78,6 @@ const EmployeeRecord: React.FC<EmployeeRecordProps> = () => {
     return () => clearInterval(timer);
   }, [timeLog]);
 
-  const handleEvent = async (event: 'Time In' | 'Lunch In' | 'Lunch Out' | 'Time Out') => {
-    try {
-      const timestamp = new Date().toISOString();
-      const updatedTimeLog: TimeLog = {
-        ...timeLog!,
-        date: timeLog?.date || '',
-        [event === 'Time In' ? 'timeIn' : event === 'Lunch In' ? 'lunchIn' : event === 'Lunch Out' ? 'lunchOut' : 'timeOut']: timestamp,
-      };
-
-      // Update the user's time log for the current date in Firestore
-      if (timeLog?.date) {
-        await updateTimeLogForCurrentUser(timeLog.date, updatedTimeLog);
-      }
-    } catch (error) {
-      console.error(`Error recording ${event}:`, error);
-    }
-  };
-
   const formatTimestamp = (timestamp: string | null) => {
     if (!timestamp) return 'Not recorded';
 
@@ -115,6 +96,41 @@ const EmployeeRecord: React.FC<EmployeeRecordProps> = () => {
       return `${hours} hours and ${remainingMinutes} minutes`;
     }
     return 'N/A';
+  };
+
+  const computeTotalTime = (timeLog: TimeLog): number | null => {
+    if (timeLog?.timeIn && timeLog?.timeOut) {
+      const timeInMs = new Date(timeLog.timeIn).getTime();
+      const timeOutMs = new Date(timeLog.timeOut).getTime();
+      const timeDiffMs = timeOutMs - timeInMs;
+      const totalTimeMinutes = Math.floor(timeDiffMs / 60000);
+      return totalTimeMinutes;
+    }
+    return null;
+  };
+
+  const handleEvent = async (event: 'Time In' | 'Lunch In' | 'Lunch Out' | 'Time Out') => {
+    try {
+      const timestamp = new Date().toISOString();
+      const updatedTimeLog: TimeLog = {
+        ...timeLog!,
+        date: timeLog?.date || '',
+        [event === 'Time In' ? 'timeIn' : event === 'Lunch In' ? 'lunchIn' : event === 'Lunch Out' ? 'lunchOut' : 'timeOut']: timestamp,
+      };
+
+      // Compute and update the totalTime when recording Time Out
+      if (event === 'Time Out') {
+        const totalTime = computeTotalTime(updatedTimeLog);
+        updatedTimeLog.totalTime = totalTime;
+      }
+
+      // Update the user's time log for the current date in Firestore
+      if (timeLog?.date) {
+        await updateTimeLogForCurrentUser(timeLog.date, updatedTimeLog);
+      }
+    } catch (error) {
+      console.error(`Error recording ${event}:`, error);
+    }
   };
 
   return (
